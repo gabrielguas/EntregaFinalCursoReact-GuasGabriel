@@ -1,0 +1,22 @@
+/* Estilo del contenedor */
+.titulo-container {
+    text-align: center; /* Centrar el texto horizontalmente */
+    background-color: #3498db; /* Color de fondo */
+    padding: 20px; /* Espaciado interior para el contenido */
+    color: white; /* Color del texto */
+  }
+  
+  /* Estilo del título */
+  .titulo {
+    font-size: 36px; /* Tamaño de fuente */
+    font-weight: bold; /* Grosor de fuente */
+    margin: 0; /* Eliminar el margen predeterminado */
+  }
+  
+  /* Estilo del subtítulo */
+  .subtitulo {
+    font-size: 24px; /* Tamaño de fuente */
+    font-style: italic; /* Estilo de fuente cursiva */
+    margin: 0; /* Eliminar el margen predeterminado */
+  }
+  
