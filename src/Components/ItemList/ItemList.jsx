@@ -1,17 +1,19 @@
 import Item from "../Item/Item"
 
-const ItemList = ({products}) => {
+const ItemList = ({ products, selectedCategory }) => {
+    const filteredProducts =
+      selectedCategory === "all"
+        ? products
+        : products.filter((product) => product.categoryId === selectedCategory);
+  
     return (
-        <>
-            {
-                products.map(product => <Item key={product.id} product={product} /> )
-            }
-        </>
-
-    )
-}
-
-
+      <>
+        {filteredProducts.map((product) => (
+          <Item key={product.id} product={product} />
+        ))}
+      </>
+    );
+  };
 
 
 export default ItemList

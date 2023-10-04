@@ -1,26 +1,13 @@
-import Swal from 'sweetalert2'; // Importa SweetAlert
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-const CartWidget = ({ comprar }) => {
-    const cartItemCount = 3;
-
-    const handleComprarClick = () => {
-        // Muestra una alerta utilizando SweetAlert
-        Swal.fire({
-            title: '¿Deseas confirmar la compra?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Sí',
-            cancelButtonText: 'Cancelar',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                comprar();
-            }
-        });
-    };
+const CartWidget = () => {
 
     return (
-        <div onClick={handleComprarClick} style={{ cursor: 'pointer' }}>
-            {cartItemCount} 🛒HAZ CLICK AQUI
+        <div style={{ cursor: 'pointer' }}>
+            <Link className="nav-link" to="/cart">
+                🛒Ver compra
+            </Link>
         </div>
     );
 };

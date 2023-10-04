@@ -1,0 +1,37 @@
+/* Item.css */
+
+.card {
+    width: 18rem;
+    margin-bottom: 20px;
+    display: flex; /* Utiliza flexbox para alinear elementos verticalmente */
+    flex-direction: column; /* Apila elementos verticalmente */
+  }
+  
+  .card-image {
+    flex-grow: 1; /* Permite que la imagen ocupe todo el espacio disponible */
+    background-size: cover; /* Ajusta el tamaño del fondo para cubrir la tarjeta */
+    background-position: center; /* Centra la imagen de fondo */
+  }
+  
+  .card-body {
+    text-align: left;
+    padding: 1rem; /* Espaciado interno */
+  }
+  
+  .card-title {
+    font-size: 1.25rem; /* Tamaño de fuente para el título */
+    margin-bottom: 0.5rem; /* Espacio inferior mínimo */
+  }
+  
+  .card-text {
+    margin-bottom: 0.5rem; /* Espacio inferior mínimo para el texto */
+  }
+  
+  .card-footer {
+    text-align: center;
+  }
+  
+  .card-footer button {
+    width: 100%;
+  }
+  

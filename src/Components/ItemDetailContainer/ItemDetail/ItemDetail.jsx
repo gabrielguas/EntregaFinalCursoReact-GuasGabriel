@@ -1,22 +1,42 @@
-import ItemCounter from "../../Counter/ItemCounter"
+import React from 'react';
+import ItemCounter from '../../Counter/ItemCounter';
+import './ItemDetailStyle.css';
+import { useCartContext } from '../../../context/CartContext';
+import Swal from 'sweetalert2';
 
 export const ItemDetail = ({ product }) => {
-    const onAdd = (count) => {
-        console.log('Productos seleccionados: ', count)
-    }
-    return (
-        <div className="row">
-            <h2>Vista de detalle</h2>
-            <div className="col">
-                <img className="w-25" src={product.imageUrl} alt="imagen producto" />
-                <div>
-                    <p>Descripcion: {product.description}</p>
-                    <p>Precio: {product.price}</p>
-                </div>
-            </div>
-            <div className="col">
-                <ItemCounter initial={1} stock={10} onAdd={onAdd}/> 
-            </div>
+  const { addProduct } = useCartContext();
+  const onAdd = (count) => {
+    addProduct({ ...product, quantity: count });
+
+    Swal.fire({
+      title: 'Producto agregado',
+      text: `${count} ${count === 1 ? 'unidad' : 'unidades'} de ${product.title} se han agregado al carrito 😎.`,
+      icon: 'success',
+      confirmButtonText: 'Ok',
+    });
+  };
+
+  return (
+    <div className="item-detail-container">
+      <h2>Vista de detalle</h2>
+      <div className="item-detail">
+        <img className="item-image" src={product.imageUrl} alt="imagen producto" />
+        <div className="item-info">
+          <p className="item-description">Descripción: {product.description}</p>
+          <p className="item-price">Precio: ${product.price}</p>
+          {product.stock > 0 ? (
+            <>
+              <p className="item-stock">Stock disponible: {product.stock}</p>
+              <div className="item-counter">
+                <ItemCounter initial={1} stock={product.stock} onAdd={onAdd} />
+              </div>
+            </>
+          ) : (
+            <p className="item-out-of-stock">Sin stock por el momento</p>
+          )}
         </div>
-    )
-}
+      </div>
+    </div>
+  );
+};

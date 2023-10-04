@@ -1,0 +1,43 @@
+.item-detail-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .item-detail {
+    display: flex;
+    align-items: center;
+  }
+  
+  .item-image {
+    width: 200px;
+    height: auto;
+    margin-right: 20px;
+  }
+  
+  .item-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .item-description {
+    margin-bottom: 10px;
+  }
+  
+  .item-price {
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  
+  .item-stock {
+    margin-bottom: 10px;
+  }
+  
+  .item-counter {
+    margin-top: 20px;
+  }
+  
