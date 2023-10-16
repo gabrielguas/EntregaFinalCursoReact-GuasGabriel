@@ -5,13 +5,13 @@ import Swal from 'sweetalert2';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { getFirestore, updateDoc, doc, addDoc } from 'firebase/firestore';
-import { collection } from 'firebase/firestore'; // Import collection
+import { collection } from 'firebase/firestore'; 
 import { Link } from 'react-router-dom';
 
 const CartContainer = () => {
     const { cartList, deleteCart, totalPrice, removeProduct } = useCartContext();
     const db = getFirestore();
-    const [userInfo, setUserInfo] = useState({ firstName: '', lastName: '', email: '' });
+    const [userInfo, setUserInfo] = useState({ firstName: '', lastName: '', email: '' }); //quise usar un state pero no sé xq no funcionó :(
     let orderID = null;
 
     const handleAddOrder = async (firstName, lastName, email) => {
