@@ -5,7 +5,8 @@ import { useCartContext } from '../../../context/CartContext';
 import Swal from 'sweetalert2';
 
 export const ItemDetail = ({ product }) => {
-  const { addProduct } = useCartContext();
+  const { addProduct, cartList } = useCartContext();
+
   const onAdd = (count) => {
     addProduct({ ...product, quantity: count });
 
@@ -16,6 +17,14 @@ export const ItemDetail = ({ product }) => {
       confirmButtonText: 'Ok',
     });
   };
+
+  // Calcula la cantidad de este producto en el carrito
+  const itemCountInCart = cartList.reduce((total, item) => {
+    if (item.id === product.id) {
+      return total + item.quantity;
+    }
+    return total;
+  }, 0);
 
   return (
     <div className="item-detail-container">
@@ -31,6 +40,7 @@ export const ItemDetail = ({ product }) => {
               <div className="item-counter">
                 <ItemCounter initial={1} stock={product.stock} onAdd={onAdd} />
               </div>
+              <p className="item-quantity-in-cart">Cantidad en el carrito: {itemCountInCart}</p>
             </>
           ) : (
             <p className="item-out-of-stock">Sin stock por el momento</p>

@@ -4,12 +4,36 @@ import './CartContainer.css';
 import Swal from 'sweetalert2';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
-import { getFirestore, updateDoc, doc } from 'firebase/firestore';
+import { getFirestore, updateDoc, doc, addDoc } from 'firebase/firestore';
+import { collection } from 'firebase/firestore'; // Import collection
+import { Link } from 'react-router-dom';
 
 const CartContainer = () => {
     const { cartList, deleteCart, totalPrice, removeProduct } = useCartContext();
     const db = getFirestore();
     const [userInfo, setUserInfo] = useState({ firstName: '', lastName: '', email: '' });
+    let orderID = null;
+
+    const handleAddOrder = async (firstName, lastName, email) => {
+        const order = {
+            buyer: { firstName, lastName, email },
+            items: cartList.map((prod) => {
+                return { id: prod.categoryId, name: prod.title, price: prod.price, quantity: prod.quantity };
+            }),
+            total: totalPrice
+        };
+
+        const queryDB = getFirestore();
+        const ordersCollection = collection(queryDB, 'orders');
+
+        try {
+            const docRef = await addDoc(ordersCollection, order);
+            orderID = docRef.id;
+        } catch (error) {
+            console.error('Error al agregar el pedido:', error);
+            return null;
+        }
+    };
 
     const handleRemoveItem = (productId) => {
         Swal.fire({
@@ -57,9 +81,9 @@ const CartContainer = () => {
         const { value: formValues, isConfirmed } = await Swal.fire({
             title: 'Finalizar Compra',
             html: `
-                <input id="swal-input1" class="swal2-input" placeholder="Nombre" value="${userInfo.firstName}" required>
-                <input id="swal-input2" class="swal2-input" placeholder="Apellido" value="${userInfo.lastName}" required>
-                <input id="swal-input3" class="swal2-input" placeholder="Correo Electrónico" value="${userInfo.email}" required>
+                <input id="swal-input1" class="swal2-input" placeholder="Nombre" required>
+                <input id="swal-input2" class="swal2-input" placeholder="Apellido" required>
+                <input id="swal-input3" class="swal2-input" placeholder="Correo Electrónico" required>
                 <br>
                 <p>Elementos Comprados: ${purchasedProducts.join(', ')}</p>
             `,
@@ -73,22 +97,19 @@ const CartContainer = () => {
                 const lastName = document.getElementById('swal-input2').value;
                 const email = document.getElementById('swal-input3').value;
 
-               
                 if (!firstName || !lastName || !email) {
                     Swal.showValidationMessage('Por favor, completa todos los campos.');
                 } else if (!isValidEmail(email)) {
                     Swal.showValidationMessage('Por favor, ingresa un correo electrónico válido.');
                 } else {
-                    return [firstName, lastName, email];
+                    handleAddOrder(firstName, lastName, email);
                 }
             },
         });
 
-        
         if (isConfirmed) {
             const updatePromises = [];
 
-           
             cartList.forEach((prod) => {
                 const productRef = doc(db, 'products', prod.id);
                 const newStock = prod.stock - prod.quantity;
@@ -99,17 +120,15 @@ const CartContainer = () => {
             try {
                 await Promise.all(updatePromises);
 
-                
-                if (formValues) {
-                    const [firstName, lastName, email] = formValues;
-                    setUserInfo({ firstName, lastName, email });
-                }
-
-                Swal.fire('¡Compra finalizada!', 'Gracias por tu compra, nos comunicaremos.', 'success');
+                Swal.fire('¡Compra finalizada!', `Gracias por tu compra. ID de compra: ${orderID}`, 'success');
 
                 deleteCart();
             } catch (error) {
                 console.error('Error al actualizar el stock:', error);
+
+                if (error.code === 'permission-denied') {
+                    console.error('Permiso denegado. Asegúrate de que tienes los permisos adecuados en Firestore.');
+                }
             }
         } else {
             Swal.fire('Compra cancelada', 'No se ha finalizado la compra.', 'info');
@@ -130,6 +149,7 @@ const CartContainer = () => {
                 <div className="empty-cart">
                     <FontAwesomeIcon icon={faShoppingCart} className="empty-cart-icon" />
                     <p>Tu carrito está vacío</p>
+                    <Link to="/">Volver al inicio</Link>
                 </div>
             ) : (
                 <div>
